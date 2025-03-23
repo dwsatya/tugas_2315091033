@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-/*************  ✨ Codeium Command ⭐  *************/
   /// Builds the main application widget.
   ///
   /// This method returns a [MaterialApp] widget with a title of 'Flutter Demo'.
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
   /// derived from a deep purple seed color. The home screen of the application
   /// is defined by the [HomePage] widget.
 
-/******  98d8e636-5eff-4ea5-9242-17468b9eb814  *******/
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
