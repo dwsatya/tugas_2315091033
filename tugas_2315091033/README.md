@@ -17,3 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Screenshots
 ![app] (assets/screenshot1.png)
+![app] (assets/screenshot2.png)
