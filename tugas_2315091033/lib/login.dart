@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_2315091033/main.dart';
 import 'package:tugas_2315091033/homepage.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _handleLogin() {
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text;
+
+    if (username == 'admin' && password == 'admin123') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Username atau Password salah!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Koperasi Undiksha",
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold
-          ),
+        title: const Text(
+          "Koperasi Undiksha",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 9, 28, 122),
@@ -22,12 +46,13 @@ class Login extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 30,),
-            Image.asset('logoundiksha.png',
-            width: 180,
-            height: 180
-            ,),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30),
+            Image.asset(
+              'logoundiksha.png',
+              width: 180,
+              height: 180,
+            ),
+            const SizedBox(height: 30),
             Container(
               padding: const EdgeInsets.all(20),
               alignment: Alignment.center,
@@ -36,55 +61,56 @@ class Login extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: const Color.fromARGB(255, 179, 179, 179),
-                  width: 2
+                  width: 2,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: [
-                  Text('Username',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: const Color.fromARGB(255, 9, 28, 122)
+                  const Text(
+                    'Username',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 9, 28, 122),
+                    ),
                   ),
-                  ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   TextField(
+                    controller: _usernameController,
                     decoration: InputDecoration(
-                    labelText: 'username',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    )
-                  )),
-                  SizedBox(height: 25,),
-                  Text('Password',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: const Color.fromARGB(255, 9, 28, 122)
+                      labelText: 'username',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 25),
+                  const Text(
+                    'Password',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 9, 28, 122),
+                    ),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10),
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     obscuringCharacter: '*',
                     decoration: InputDecoration(
-                    labelText: 'password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    )
-                  )),
-                  SizedBox(height: 25,),
+                      labelText: 'password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
-                        );
-                      },
+                      onPressed: _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 9, 28, 122),
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -98,19 +124,20 @@ class Login extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  Text('Lupa Password?',
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 9, 28, 122),
-                    fontSize: 15
-                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Lupa Password?',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 9, 28, 122),
+                      fontSize: 15,
+                    ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
- } 
+}
