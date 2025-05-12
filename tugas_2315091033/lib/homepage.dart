@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_2315091033/login.dart';
+import 'package:tugas_2315091033/transfer_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int saldo = 1200000;
+
+  void updateSaldo(int jumlahTransfer) {
+    setState(() {
+      saldo -= jumlahTransfer;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +74,26 @@ class HomePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Nasabah',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Dewa Md Satya Pratama Putra',
                         style: TextStyle(fontSize: 13),
                       ),
-                      SizedBox(height: 5),
-                      Text(
+                      const SizedBox(height: 5),
+                      const Text(
                         'Total Saldo Anda',
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       Text(
-                        'Rp. 1.200.000',
-                        style: TextStyle(
+                        'Rp. ${saldo.toString()}',
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.green,
@@ -95,13 +109,27 @@ class HomePage extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 3,
-              children: const [
-                MenuIcon(icon: Icons.account_balance_wallet, label: 'Cek Saldo'),
-                MenuIcon(icon: Icons.send, label: 'Transfer'),
-                MenuIcon(icon: Icons.savings, label: 'Deposito'),
-                MenuIcon(icon: Icons.payment, label: 'Pembayaran'),
-                MenuIcon(icon: Icons.monetization_on, label: 'Pinjaman'),
-                MenuIcon(icon: Icons.history, label: 'Mutasi'),
+              children: [
+                const MenuIcon(icon: Icons.account_balance_wallet, label: 'Cek Saldo'),
+                MenuIcon(
+                  icon: Icons.send,
+                  label: 'Transfer',
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TransferPage(
+                          saldo: saldo,
+                          onTransfer: updateSaldo,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const MenuIcon(icon: Icons.savings, label: 'Deposito'),
+                const MenuIcon(icon: Icons.payment, label: 'Pembayaran'),
+                const MenuIcon(icon: Icons.monetization_on, label: 'Pinjaman'),
+                const MenuIcon(icon: Icons.history, label: 'Mutasi'),
               ],
             ),
             const SizedBox(height: 20),
@@ -141,18 +169,22 @@ class HomePage extends StatelessWidget {
 class MenuIcon extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const MenuIcon({Key? key, required this.icon, required this.label}) : super(key: key);
+  const MenuIcon({Key? key, required this.icon, required this.label, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 40, color: const Color.fromARGB(255, 9, 28, 122)),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 40, color: const Color.fromARGB(255, 9, 28, 122)),
+          const SizedBox(height: 5),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
+      ),
     );
   }
 }

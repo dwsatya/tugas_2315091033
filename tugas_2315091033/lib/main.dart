@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_2315091033/login.dart';
 import 'package:tugas_2315091033/homepage.dart';
+import 'package:tugas_2315091033/transfer_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Login()
+      home: HomePage()
     );
   }
 }
