@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_2315091033/login.dart';
-import 'package:tugas_2315091033/transfer_page.dart';
+import 'login.dart';
+import 'transfer_page.dart';
+import 'pembayaran_page.dart';
+import 'pinjaman_page.dart';
+
+class Mutasi {
+  final String jenis;
+  final int jumlah;
+  final DateTime tanggal;
+
+  Mutasi({
+    required this.jenis,
+    required this.jumlah,
+    required this.tanggal,
+  });
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,11 +25,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int saldo = 1200000;
+  List<Mutasi> daftarMutasi = [];
 
-  void updateSaldo(int jumlahTransfer) {
+  void updateSaldo(int jumlah, String jenis) {
     setState(() {
-      saldo -= jumlahTransfer;
+      saldo -= jumlah;
+      daftarMutasi.add(Mutasi(
+        jenis: jenis,
+        jumlah: jumlah,
+        tanggal: DateTime.now(),
+      ));
     });
+  }
+
+  void addPinjaman(int jumlahPinjam) {
+    setState(() {
+      saldo += jumlahPinjam;
+      daftarMutasi.add(Mutasi(
+        jenis: 'Pinjaman',
+        jumlah: jumlahPinjam,
+        tanggal: DateTime.now(),
+      ));
+    });
+  }
+
+  void bukaMutasiPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MutasiPage(daftarMutasi: daftarMutasi),
+      ),
+    );
   }
 
   @override
@@ -25,10 +65,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text(
           "Koperasi Undiksha",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 9, 28, 122),
@@ -92,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                       Text(
-                        'Rp. ${saldo.toString()}',
+                        'Rp. $saldo',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -110,7 +147,25 @@ class _HomePageState extends State<HomePage> {
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 3,
               children: [
-                const MenuIcon(icon: Icons.account_balance_wallet, label: 'Cek Saldo'),
+                MenuIcon(
+                  icon: Icons.account_balance_wallet,
+                  label: 'Cek Saldo',
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text("Saldo Anda"),
+                        content: Text("Rp. $saldo"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
                 MenuIcon(
                   icon: Icons.send,
                   label: 'Transfer',
@@ -120,16 +175,50 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(
                         builder: (context) => TransferPage(
                           saldo: saldo,
-                          onTransfer: updateSaldo,
+                          onTransfer: (jumlah) =>
+                              updateSaldo(jumlah, 'Transfer'),
                         ),
                       ),
                     );
                   },
                 ),
                 const MenuIcon(icon: Icons.savings, label: 'Deposito'),
-                const MenuIcon(icon: Icons.payment, label: 'Pembayaran'),
-                const MenuIcon(icon: Icons.monetization_on, label: 'Pinjaman'),
-                const MenuIcon(icon: Icons.history, label: 'Mutasi'),
+                MenuIcon(
+                  icon: Icons.payment,
+                  label: 'Pembayaran',
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PembayaranPage(
+                          saldo: saldo,
+                          onBayar: (jumlah) =>
+                              updateSaldo(jumlah, 'Pembayaran'),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                MenuIcon(
+                  icon: Icons.monetization_on,
+                  label: 'Pinjaman',
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PinjamanPage(
+                          saldo: saldo,
+                          addPinjaman: addPinjaman,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                MenuIcon(
+                  icon: Icons.history,
+                  label: 'Mutasi',
+                  onTap: bukaMutasiPage,
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -140,7 +229,10 @@ class _HomePageState extends State<HomePage> {
                 children: const [
                   Text(
                     'Butuh Bantuan?',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white),
                   ),
                   Text(
                     '0878-1234-1024',
@@ -171,7 +263,8 @@ class MenuIcon extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const MenuIcon({Key? key, required this.icon, required this.label, this.onTap}) : super(key: key);
+  const MenuIcon({Key? key, required this.icon, required this.label, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +286,8 @@ class BottomIcon extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const BottomIcon({Key? key, required this.icon, required this.label}) : super(key: key);
+  const BottomIcon({Key? key, required this.icon, required this.label})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -203,6 +297,49 @@ class BottomIcon extends StatelessWidget {
         const SizedBox(height: 5),
         Text(label, style: const TextStyle(fontSize: 12)),
       ],
+    );
+  }
+}
+
+class MutasiPage extends StatelessWidget {
+  final List<Mutasi> daftarMutasi;
+
+  const MutasiPage({Key? key, required this.daftarMutasi}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Riwayat Mutasi', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromARGB(255, 9, 28, 122),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: daftarMutasi.isEmpty
+          ? const Center(child: Text('Belum ada transaksi.'))
+          : ListView.builder(
+              itemCount: daftarMutasi.length,
+              itemBuilder: (context, index) {
+                final mutasi = daftarMutasi[index];
+                return ListTile(
+                  leading: Icon(
+                    mutasi.jenis == 'Pinjaman'
+                        ? Icons.arrow_downward
+                        : Icons.arrow_upward,
+                    color: mutasi.jenis == 'Pinjaman' ? Colors.green : Colors.red,
+                  ),
+                  title: Text(mutasi.jenis),
+                  subtitle: Text(
+                      '${mutasi.tanggal.day}/${mutasi.tanggal.month}/${mutasi.tanggal.year}'),
+                  trailing: Text(
+                    'Rp. ${mutasi.jumlah}',
+                    style: TextStyle(
+                      color: mutasi.jenis == 'Pinjaman' ? Colors.green : Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }

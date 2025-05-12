@@ -37,8 +37,38 @@ class _TransferPageState extends State<TransferPage> {
           key: _formKey,
           child: Column(
             children: [
-              Text("Saldo saat ini: Rp. ${widget.saldo}"),
-              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color.fromARGB(255, 9, 28, 122), width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Saldo Saat Ini",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: const Color.fromARGB(255, 9, 28, 122),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      "Rp. ${widget.saldo}",
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
 
               // Nomor Rekening
               TextFormField(
