@@ -39,13 +39,13 @@ class _PembayaranPageState extends State<PembayaranPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Background putih
+      backgroundColor: Colors.white, 
       appBar: AppBar(
         title: const Text(
           'Pembayaran',
-          style: TextStyle(color: Colors.white), // Tulisan putih
+          style: TextStyle(color: Colors.white), 
         ),
-        backgroundColor: const Color.fromARGB(255, 9, 28, 122), // AppBar biru tua
+        backgroundColor: const Color.fromARGB(255, 9, 28, 122),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -116,8 +116,8 @@ class _PembayaranPageState extends State<PembayaranPage> {
               ElevatedButton(
                 onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 9, 28, 122), // Tombol biru tua
-                  foregroundColor: Colors.white, // Tulisan putih
+                  backgroundColor: const Color.fromARGB(255, 9, 28, 122),
+                  foregroundColor: Colors.white, 
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 ),
                 child: const Text(

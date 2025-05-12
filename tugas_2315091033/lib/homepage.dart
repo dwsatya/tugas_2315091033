@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_2315091033/profile_page.dart';
+import 'profile_page.dart';
 import 'login.dart';
 import 'transfer_page.dart';
 import 'pembayaran_page.dart';
@@ -9,7 +9,6 @@ import 'deposito_page.dart';
 import 'setting_page.dart';
 import 'mutasi_page.dart';
 import 'mutasi_model.dart';
-import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

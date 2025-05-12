@@ -23,7 +23,7 @@ class _DepositoPageState extends State<DepositoPage> {
   void _cekToken() {
     setState(() {
       _isLoading = true;
-      _errorMessage = null; // reset error
+      _errorMessage = null;
     });
 
     Future.delayed(const Duration(seconds: 1), () {

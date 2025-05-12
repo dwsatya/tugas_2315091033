@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class CekSaldoPage extends StatelessWidget {
   final int saldo;
-
   const CekSaldoPage({Key? key, required this.saldo}) : super(key: key);
 
   @override

@@ -22,7 +22,7 @@ class _TransferPageState extends State<TransferPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Background jadi putih
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'Transfer Uang',
@@ -70,7 +70,6 @@ class _TransferPageState extends State<TransferPage> {
               ),
 
 
-              // Nomor Rekening
               TextFormField(
                 controller: _rekeningController,
                 keyboardType: TextInputType.number,
@@ -86,7 +85,6 @@ class _TransferPageState extends State<TransferPage> {
               ),
               const SizedBox(height: 16),
 
-              // Dropdown Bank
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   labelText: 'Pilih Bank Tujuan',
@@ -111,7 +109,6 @@ class _TransferPageState extends State<TransferPage> {
               ),
               const SizedBox(height: 16),
 
-              // Jumlah Transfer
               TextFormField(
                 controller: _jumlahController,
                 keyboardType: TextInputType.number,

@@ -6,7 +6,6 @@ class MutasiPage extends StatelessWidget {
 
   const MutasiPage({Key? key, required this.daftarMutasi}) : super(key: key);
 
-  // Fungsi bantu untuk menentukan apakah jenis transaksi menambah saldo
   bool _isPositive(String jenis) {
     return jenis == 'Pinjaman' || jenis == 'Deposito';
   }
