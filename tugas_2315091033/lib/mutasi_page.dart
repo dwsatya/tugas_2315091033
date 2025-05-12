@@ -6,6 +6,11 @@ class MutasiPage extends StatelessWidget {
 
   const MutasiPage({Key? key, required this.daftarMutasi}) : super(key: key);
 
+  // Fungsi bantu untuk menentukan apakah jenis transaksi menambah saldo
+  bool _isPositive(String jenis) {
+    return jenis == 'Pinjaman' || jenis == 'Deposito';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,15 +38,14 @@ class MutasiPage extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final mutasi = daftarMutasi[index];
+                final isPositive = _isPositive(mutasi.jenis);
+
                 return Container(
-                  color: Colors.white, 
+                  color: Colors.white,
                   child: ListTile(
                     leading: Icon(
-                      mutasi.jenis == 'Pinjaman'
-                          ? Icons.arrow_downward
-                          : Icons.arrow_upward,
-                      color:
-                          mutasi.jenis == 'Pinjaman' ? Colors.green : Colors.red,
+                      isPositive ? Icons.arrow_downward : Icons.arrow_upward,
+                      color: isPositive ? Colors.green : Colors.red,
                     ),
                     title: Text(mutasi.jenis),
                     subtitle: Text(
@@ -50,9 +54,7 @@ class MutasiPage extends StatelessWidget {
                     trailing: Text(
                       'Rp. ${mutasi.jumlah}',
                       style: TextStyle(
-                        color: mutasi.jenis == 'Pinjaman'
-                            ? Colors.green
-                            : Colors.red,
+                        color: isPositive ? Colors.green : Colors.red,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

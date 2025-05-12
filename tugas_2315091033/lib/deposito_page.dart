@@ -18,10 +18,12 @@ class _DepositoPageState extends State<DepositoPage> {
   final TextEditingController _tokenController = TextEditingController();
   final String tokenValid = "2315091033";
   bool _isLoading = false;
+  String? _errorMessage;
 
   void _cekToken() {
     setState(() {
       _isLoading = true;
+      _errorMessage = null; // reset error
     });
 
     Future.delayed(const Duration(seconds: 1), () {
@@ -32,39 +34,13 @@ class _DepositoPageState extends State<DepositoPage> {
       String inputToken = _tokenController.text.trim();
 
       if (inputToken == tokenValid) {
-        int depositAmount = 500000; // Contoh nominal deposito
+        int depositAmount = 500000;
         widget.onDeposit(depositAmount);
-
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("Berhasil"),
-            content: Text("Deposito berhasil. Saldo bertambah Rp. $depositAmount."),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
-                  Navigator.pop(context); // Kembali ke HomePage
-                },
-              ),
-            ],
-          ),
-        );
+        Navigator.pop(context);
       } else {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("Token Salah"),
-            content: const Text("Token yang Anda masukkan tidak valid."),
-            actions: [
-              TextButton(
-                child: const Text("Coba Lagi"),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-        );
+        setState(() {
+          _errorMessage = "Token yang Anda masukkan tidak valid.";
+        });
       }
     });
   }
@@ -99,6 +75,13 @@ class _DepositoPageState extends State<DepositoPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+            if (_errorMessage != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                _errorMessage!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            ],
             const SizedBox(height: 20),
             _isLoading
                 ? const CircularProgressIndicator()
@@ -106,12 +89,14 @@ class _DepositoPageState extends State<DepositoPage> {
                     onPressed: _cekToken,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 9, 28, 122),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
                     ),
                     child: const Text(
                       'Kirim',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
           ],

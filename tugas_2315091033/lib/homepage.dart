@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_2315091033/profile_page.dart';
 import 'login.dart';
 import 'transfer_page.dart';
 import 'pembayaran_page.dart';
 import 'pinjaman_page.dart';
 import 'cek_saldo_page.dart';
 import 'deposito_page.dart';
-import 'setting_page.dart'; // Impor halaman pengaturan
-
-class Mutasi {
-  final String jenis;
-  final int jumlah;
-  final DateTime tanggal;
-
-  Mutasi({
-    required this.jenis,
-    required this.jumlah,
-    required this.tanggal,
-  });
-}
+import 'setting_page.dart';
+import 'mutasi_page.dart';
+import 'mutasi_model.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int saldo = 1200000;
-  List<Mutasi> daftarMutasi = [];
+   List<Mutasi> daftarMutasi = [];
 
   void updateSaldo(int jumlah, String jenis) {
     setState(() {
@@ -63,14 +55,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void bukaMutasiPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MutasiPage(daftarMutasi: daftarMutasi),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +223,16 @@ class _HomePageState extends State<HomePage> {
                 MenuIcon(
                   icon: Icons.history,
                   label: 'Mutasi',
-                  onTap: bukaMutasiPage,
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MutasiPage(
+                          daftarMutasi: daftarMutasi,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -267,20 +261,35 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 BottomIcon(
-                  icon: Icons.settings,
+                  icon: Icons.settings, 
                   label: 'Setting',
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SettingPage()), // Navigasi ke SettingPage
+                      MaterialPageRoute(builder: (context) => const SettingPage()),
                     );
                   },
                 ),
-                const BottomIcon(icon: Icons.qr_code, label: 'QR'),
-                const BottomIcon(icon: Icons.person, label: 'Profile'),
+                BottomIcon(icon: 
+                  Icons.person,
+                  label: 'Profile',
+                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                          nama: "Dewa Md Satya Pratama Putra",
+                          nomorRekening: "1234567890",
+                          saldo: saldo,
+                          email: "dewa@example.com",
+                          nomorTelepon: "087812341024",
+                        ),
+                      ),
+                    );
+                  },
+                  ),
               ],
             ),
-
             const SizedBox(height: 20),
           ],
         ),
@@ -316,61 +325,22 @@ class MenuIcon extends StatelessWidget {
 class BottomIcon extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
 
-  const BottomIcon({Key? key, required this.icon, required this.label})
+  const BottomIcon({Key? key, required this.icon, required this.label, this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, size: 30, color: const Color.fromARGB(255, 9, 28, 122)),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
-    );
-  }
-}
-
-class MutasiPage extends StatelessWidget {
-  final List<Mutasi> daftarMutasi;
-
-  const MutasiPage({Key? key, required this.daftarMutasi}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Riwayat Mutasi', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 9, 28, 122),
-        iconTheme: const IconThemeData(color: Colors.white),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Icon(icon, size: 30, color: const Color.fromARGB(255, 9, 28, 122)),
+          const SizedBox(height: 5),
+          Text(label, style: const TextStyle(fontSize: 12)),
+        ],
       ),
-      body: daftarMutasi.isEmpty
-          ? const Center(child: Text('Belum ada transaksi.'))
-          : ListView.builder(
-              itemCount: daftarMutasi.length,
-              itemBuilder: (context, index) {
-                final mutasi = daftarMutasi[index];
-                return ListTile(
-                  leading: Icon(
-                    mutasi.jenis == 'Pinjaman'
-                        ? Icons.arrow_downward
-                        : Icons.arrow_upward,
-                    color: mutasi.jenis == 'Pinjaman' ? Colors.green : Colors.red,
-                  ),
-                  title: Text(mutasi.jenis),
-                  subtitle: Text(
-                      '${mutasi.tanggal.day}/${mutasi.tanggal.month}/${mutasi.tanggal.year}'),
-                  trailing: Text(
-                    'Rp. ${mutasi.jumlah}',
-                    style: TextStyle(
-                      color: mutasi.jenis == 'Pinjaman' ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                );
-              },
-            ),
     );
   }
 }
