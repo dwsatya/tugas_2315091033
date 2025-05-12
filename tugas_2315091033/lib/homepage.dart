@@ -3,6 +3,9 @@ import 'login.dart';
 import 'transfer_page.dart';
 import 'pembayaran_page.dart';
 import 'pinjaman_page.dart';
+import 'cek_saldo_page.dart';
+import 'deposito_page.dart';
+import 'setting_page.dart'; // Impor halaman pengaturan
 
 class Mutasi {
   final String jenis;
@@ -44,6 +47,17 @@ class _HomePageState extends State<HomePage> {
       daftarMutasi.add(Mutasi(
         jenis: 'Pinjaman',
         jumlah: jumlahPinjam,
+        tanggal: DateTime.now(),
+      ));
+    });
+  }
+
+  void tambahSaldoDariDeposito(int jumlahDeposit) {
+    setState(() {
+      saldo += jumlahDeposit;
+      daftarMutasi.add(Mutasi(
+        jenis: 'Deposito',
+        jumlah: jumlahDeposit,
         tanggal: DateTime.now(),
       ));
     });
@@ -151,17 +165,10 @@ class _HomePageState extends State<HomePage> {
                   icon: Icons.account_balance_wallet,
                   label: 'Cek Saldo',
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: const Text("Saldo Anda"),
-                        content: Text("Rp. $saldo"),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text("OK"),
-                          ),
-                        ],
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CekSaldoPage(saldo: saldo),
                       ),
                     );
                   },
@@ -182,7 +189,21 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                const MenuIcon(icon: Icons.savings, label: 'Deposito'),
+                MenuIcon(
+                  icon: Icons.savings,
+                  label: 'Deposito',
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DepositoPage(
+                          saldo: saldo,
+                          onDeposit: tambahSaldoDariDeposito,
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 MenuIcon(
                   icon: Icons.payment,
                   label: 'Pembayaran',
@@ -244,12 +265,22 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                BottomIcon(icon: Icons.settings, label: 'Setting'),
-                BottomIcon(icon: Icons.qr_code, label: 'QR'),
-                BottomIcon(icon: Icons.person, label: 'Profile'),
+              children: [
+                BottomIcon(
+                  icon: Icons.settings,
+                  label: 'Setting',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SettingPage()), // Navigasi ke SettingPage
+                    );
+                  },
+                ),
+                const BottomIcon(icon: Icons.qr_code, label: 'QR'),
+                const BottomIcon(icon: Icons.person, label: 'Profile'),
               ],
             ),
+
             const SizedBox(height: 20),
           ],
         ),

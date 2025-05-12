@@ -1,4 +1,4 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class CekSaldoPage extends StatelessWidget {
   final int saldo;
@@ -8,7 +8,7 @@ class CekSaldoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF5F6FA),
       appBar: AppBar(
         title: const Text(
           'Cek Saldo',
@@ -18,19 +18,23 @@ class CekSaldoPage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
           padding: const EdgeInsets.all(20),
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.shade300, width: 1),
-            borderRadius: BorderRadius.circular(12),
+            gradient: const LinearGradient(
+              colors: [Color(0xFF0D47A1), Color(0xFF42A5F5)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 3,
-                blurRadius: 10,
-                offset: const Offset(0, 3),
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
@@ -38,20 +42,28 @@ class CekSaldoPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.account_balance_wallet,
-                  size: 60, color: Colors.green),
+                  size: 60, color: Colors.white),
               const SizedBox(height: 20),
               const Text(
                 'Total Saldo Anda',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 18, color: Colors.white70),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Rp. ${saldo.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
+                style: const TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 10),
-              Text(
-                'Rp. $saldo',
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
+              const Divider(color: Colors.white24, thickness: 1),
+              const SizedBox(height: 8),
+              const Text(
+                'Saldo aktif dan tersedia untuk transaksi',
+                style: TextStyle(fontSize: 13, color: Colors.white60),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
