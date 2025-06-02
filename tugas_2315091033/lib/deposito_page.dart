@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'qr_scanner_page.dart'; 
+
 
 class DepositoPage extends StatefulWidget {
   final int saldo;
@@ -19,6 +21,7 @@ class _DepositoPageState extends State<DepositoPage> {
   final String tokenValid = "2315091033";
   bool _isLoading = false;
   String? _errorMessage;
+  String? _hasilScan; // <--- Tambahkan ini
 
   void _cekToken() {
     setState(() {
@@ -45,6 +48,21 @@ class _DepositoPageState extends State<DepositoPage> {
     });
   }
 
+  Future<void> _bukaScanner() async {
+    final result = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (context) => const QRScannerPage()),
+    );
+
+    if (result != null) {
+      setState(() {
+        _tokenController.text = result;
+        _hasilScan = result; // <-- Simpan hasil scan di sini
+      });
+      _cekToken(); // langsung verifikasi jika hasil QR masuk
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +81,7 @@ class _DepositoPageState extends State<DepositoPage> {
         child: Column(
           children: [
             const Text(
-              'Masukkan token deposito untuk menambahkan saldo Anda.',
+              'Masukkan token deposito atau scan QR Code.',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
@@ -75,6 +93,16 @@ class _DepositoPageState extends State<DepositoPage> {
                 border: OutlineInputBorder(),
               ),
             ),
+            if (_hasilScan != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                'Hasil Scan: $_hasilScan',
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
             if (_errorMessage != null) ...[
               const SizedBox(height: 10),
               Text(
@@ -83,22 +111,38 @@ class _DepositoPageState extends State<DepositoPage> {
               ),
             ],
             const SizedBox(height: 20),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _cekToken,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 9, 28, 122),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40,
-                        vertical: 12,
-                      ),
-                    ),
-                    child: const Text(
-                      'Kirim',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _cekToken,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 9, 28, 122),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 12,
                     ),
                   ),
+                  child: const Text(
+                    'Kirim',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  onPressed: _bukaScanner,
+                  icon: const Icon(Icons.qr_code_scanner, color: Colors.white,),
+                  label: const Text('Scan', style: TextStyle(color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "722020111689",
+    "project_id": "pemob-4883c",
+    "storage_bucket": "pemob-4883c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722020111689:android:295965c285a4df3f11b698",
+        "android_client_info": {
+          "package_name": "com.belajar.tugas_2315091033"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoetNh99FPgNUQN27MCXQHRUFIrRQXLGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
